@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projectGroups', function (Blueprint $table) {
+        Schema::create('weeks_users', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->integer('n_day');
+            $table->set('avaibility', ['mañana', 'tarde', 'noche']);
+            $table->foreignID('user_id')->references('id')->on('users');
+            $table->foreignID('week_id')->references('id')->on('weeks');
         });
     }
 
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projectGroups');
+        Schema::dropIfExists('weeks_users');
     }
 };

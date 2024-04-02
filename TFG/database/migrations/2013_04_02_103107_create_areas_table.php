@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tourns', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('n_dia');
-            $table->enum('type_turn', ['mañana', 'tarde','noche']);
-            $table->integer('hours');
-            $table->foreignID('user_id')->references('id')->on('users');
-            $table->foreignID('week_id')->references('id')->on('weeks');
+            $table->string('area_name', 30);
         });
     }
 
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tourns');
+        Schema::dropIfExists('areas');
     }
 };
