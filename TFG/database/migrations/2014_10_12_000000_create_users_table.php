@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('cargo', ['coordinador', 'agente'])->default('agente');
-            $table->foreignID('area_id')->references('id')->on('areas');
+            $table->foreignId('area_id')->nullable()->constrained('areas');
             $table->rememberToken();
             $table->timestamps();
         });
