@@ -63,27 +63,7 @@
                                     <a href="{{ route('register') }}" class="nav-link">{{ __('Registro') }}</a>
                                 </li>
                             @endauth
-                        @endif
-                        <!-- Idiomas -->
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    @if(App::getLocale() == 'es')
-                                        <span class="flag-icon flag-icon-es"></span>
-                                    @else
-                                        <span class="flag-icon flag-icon-gb"></span>
-                                    @endif
-                                </button>                                
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                                    <!-- Si el idioma actual es español, muestra la opción para cambiar a inglés y viceversa -->
-                                    @if(App::getLocale() == 'es')
-                                        <li><a class="dropdown-item" href="{{ route('changeLanguage', ['locale' => 'en']) }}">🇬🇧 English</a></li>
-                                    @else
-                                        <li><a class="dropdown-item" href="{{ route('changeLanguage', ['locale' => 'es']) }}">🇪🇸 Español</a></li>
-                                    @endif
-                                </ul>
-                            </div>
-                        </li>  
+                        @endif 
                     </ul>
                 </div>
             </div>

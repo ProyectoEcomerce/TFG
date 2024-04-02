@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Spatie\FlareClient\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,7 @@ Route::get('/home', function(){
     return view('auth.dashboard');
 })->middleware(['auth', 'verified']);
 
+
+Route::get('/inicio', function(){
+    return view('home');
+});
