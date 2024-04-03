@@ -9,6 +9,8 @@ class Availability extends Model
 {
     use HasFactory;
 
+    protected $fillable=['n_day', 'avaibility'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
