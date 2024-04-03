@@ -19,4 +19,4 @@ class Tourn extends Model
         return $this->belongsTo(Week::class);
     }
 }
-}
+
