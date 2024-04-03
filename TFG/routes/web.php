@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Spatie\FlareClient\View;
@@ -24,3 +25,9 @@ Route::get('/home', function(){
 })->middleware(['auth', 'verified']);
 
 Route::get('/inicio', [HomeController::class, 'index'])->name('home');
+
+Route::get('/events', [AvailabilityController::class, 'getAvailability']);
+
+Route::delete('/event/{id}', [AvailabilityController::class, 'deleteAvailability']);
+
+Route::put('/event/{id}', [AvailabilityController::class, 'updateAvailability']);
