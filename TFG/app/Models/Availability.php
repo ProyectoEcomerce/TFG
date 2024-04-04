@@ -9,7 +9,7 @@ class Availability extends Model
 {
     use HasFactory;
 
-    protected $fillable=['n_day', 'avaibility'];
+    protected $fillable=['n_day', 'avaibility','week_id'];
 
     public function user()
     {

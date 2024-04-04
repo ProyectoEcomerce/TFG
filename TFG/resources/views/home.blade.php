@@ -81,9 +81,6 @@
         
             // Obtener el número del día de la semana (0 para domingo, 1 para lunes, etc.)
             let dayOfWeek = startDate.getDay();
-            let newEndDate=info.event.end||newStartDate;
-            let newStarDateUTC=newStartDate.toISOString().slice(0,10);
-            let newEndDateUTC=newEndDate.toISOString().slice(0,10);
             $.ajax({
                 method:'PUT',
                 url:`/event/${eventId}`,

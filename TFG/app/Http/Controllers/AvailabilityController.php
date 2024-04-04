@@ -42,7 +42,7 @@ class AvailabilityController extends Controller
         $availability=Availability::findOrFail($id);
         $year = $request->year;
         $weekNumber = $request->weekNumber;
-        $dayOfWeek = $request->dayOfWeek;
+        $dayOfWeek = $request->dayOfWeek == 0 ? 7 : $request->dayOfWeek ;
         $week = Week::updateOrCreate(
             ['year' => $year, 'n_week' => $weekNumber],
             ['year' => $year, 'n_week' => $weekNumber]
