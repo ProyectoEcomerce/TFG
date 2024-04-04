@@ -1,6 +1,6 @@
 @extends('layouts.plantilla')
 
-@section('title', "Home")
+@section('title', "Turnos")
 
 @section('content')
 <div class="container mt-5">
@@ -35,7 +35,7 @@
             },
           initialView: 'dayGridMonth',
           timeZone: 'UTC + 01:00',
-          events:'/events',
+          events:'/getTourns',
           editable: true,
 
           //Eliminar
@@ -49,7 +49,7 @@
                     let eventId=info.event.id;
                     $.ajax({
                         method:'DELETE',
-                        url:'/event/'+eventId,
+                        url:'/deleteTourns/'+eventId,
                         success:function(response){
                             console.log('Se elimino' + eventId);
                             calendar.refetchEvents();
@@ -85,7 +85,7 @@
             let dayOfWeek = startDate.getDay();
             $.ajax({
                 method:'PUT',
-                url:`/event/${eventId}`,
+                url:`/updateTourns/${eventId}`,
                 data:{
                     year: year,
                     weekNumber: weekNumber,
@@ -118,6 +118,3 @@
 
     </script>
 @endsection
-
-
-

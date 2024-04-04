@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('tourns', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('n_dia');
+            $table->integer('n_day');
             $table->enum('type_turn', ['mañana', 'tarde','noche']);
-            $table->integer('hours');
+            $table->integer('hours')->nullable();
             $table->foreignID('user_id')->references('id')->on('users');
             $table->foreignID('week_id')->references('id')->on('weeks');
         });

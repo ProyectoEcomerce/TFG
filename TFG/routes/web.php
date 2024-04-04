@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TournController;
+use App\Models\Tourn;
 use Illuminate\Support\Facades\Route;
 use Spatie\FlareClient\View;
 
@@ -26,8 +28,20 @@ Route::get('/home', function(){
 
 Route::get('/inicio', [HomeController::class, 'index'])->name('home');
 
-Route::get('/events', [AvailabilityController::class, 'getAvailability']);
+Route::get('/tourns', [TournController::class, 'index'])->name('tourns');
 
-Route::delete('/event/{id}', [AvailabilityController::class, 'deleteAvailability']);
+Route::get('/avai', [AvailabilityController::class, 'index'])->name('availability');
 
-Route::put('/event/{id}', [AvailabilityController::class, 'updateAvailability']);
+Route::get('/getTourns', [TournController::class, 'getTourns']);
+
+Route::delete('/deleteTourns/{id}', [TournController::class, 'deleteTourn']);
+
+Route::put('/updateTourns/{id}', [TournController::class, 'updateTourn']);
+
+Route::post('/fill-tourns', [TournController::class, 'fillTourns'])->name('/fill-tourns');
+
+Route::get('/getAvailability', [AvailabilityController::class, 'getAvailability']);
+
+Route::delete('/deleteAvailability/{id}', [AvailabilityController::class, 'deleteAvailability']);
+
+Route::put('/updateAvailability/{id}', [AvailabilityController::class, 'updateAvailability']);

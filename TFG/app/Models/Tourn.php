@@ -9,6 +9,8 @@ class Tourn extends Model
 {
     use HasFactory;
 
+    protected $fillable=['n_day', 'type_turn','user_id' ,'week_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

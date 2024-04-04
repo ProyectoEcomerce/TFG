@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container mt-5">
-    <button id="fillTurnosButton">Llenar Turnos</button>
     <div class="card">
         <div class="card-body">
             <div id='calendar'></div>
@@ -33,9 +32,9 @@
                 center:'title',
                 right:'dayGridMonth, timeGridWeek, timeGridDay'
             },
-          initialView: 'dayGridMonth',
+          initialView: 'timeGridWeek',
           timeZone: 'UTC + 01:00',
-          events:'/events',
+          events:'/getAvailability',
           editable: true,
 
           //Eliminar
@@ -49,7 +48,7 @@
                     let eventId=info.event.id;
                     $.ajax({
                         method:'DELETE',
-                        url:'/event/'+eventId,
+                        url:'/deleteAvailability/'+eventId,
                         success:function(response){
                             console.log('Se elimino' + eventId);
                             calendar.refetchEvents();
@@ -85,7 +84,7 @@
             let dayOfWeek = startDate.getDay();
             $.ajax({
                 method:'PUT',
-                url:`/event/${eventId}`,
+                url:`/updateAvailability/${eventId}`,
                 data:{
                     year: year,
                     weekNumber: weekNumber,
@@ -103,21 +102,6 @@
         });
         calendar.render();
       });
-      $('#fillTurnosButton').click(function() {
-        $.ajax({
-            method: 'POST',
-            url: '/fill-tourns',
-            success: function(response) {
-                console.log(response.message);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al llenar los turnos', error);
-            }
-        });
-    });
 
     </script>
 @endsection
-
-
-
