@@ -102,19 +102,21 @@
           }
         });
         calendar.render();
-      });
-      $('#fillTurnosButton').click(function() {
-        $.ajax({
-            method: 'POST',
-            url: '/fill-tourns',
-            success: function(response) {
-                console.log(response.message);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error al llenar los turnos', error);
-            }
+        $('#fillTurnosButton').click(function() {
+            $.ajax({
+                method: 'POST',
+                url: '/fill-tourns',
+                success: function(response) {
+                    console.log(response.message);
+                    calendar.refetchEvents();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al llenar los turnos', error);
+                }
+            });
         });
-    });
+      });
+
 
     </script>
 @endsection

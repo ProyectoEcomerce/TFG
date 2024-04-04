@@ -20,7 +20,7 @@ class TournController extends Controller
         $availabilities= Availability::all();
 
         foreach ($availabilities as $availability){
-            Tourn::create([
+            Tourn::firstOrCreate([
                 'n_day' => $availability->n_day,
                 'type_turn' => $availability->avaibility,
                 'user_id'=> $availability->user_id,

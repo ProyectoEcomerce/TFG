@@ -19,5 +19,12 @@ class AvailabilitySeeder extends Seeder
             'user_id'=>1,
             'week_id'=>1,
         ]);
+
+        Availability::create([
+            'n_day'=>2,
+            'avaibility'=>'tarde',
+            'user_id'=>2,
+            'week_id'=>1,
+        ]);
     }
 }
