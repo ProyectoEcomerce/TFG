@@ -15,6 +15,7 @@
 
 @section('scripts')
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $.ajaxSetup({
@@ -65,18 +66,31 @@
           //Arrastrar eventos
 
           eventDrop:function(info){
-            let eventId=info.event.id;
-            let newStartDate=info.event.start;
+            let eventId = info.event.id;
+            let newStartDate = info.event.start;
+        
+            // Convertir la fecha de inicio del evento a un objeto Date
+            let startDate = new Date(newStartDate);
+        
+            // Convertir la fecha de inicio del evento a un objeto Carbon
+            let startDateCarbon = moment(startDate);
+        
+            // Obtener el año y el número de semana
+            let year = startDateCarbon.year();
+            let weekNumber = startDateCarbon.isoWeek();
+        
+            // Obtener el número del día de la semana (0 para domingo, 1 para lunes, etc.)
+            let dayOfWeek = startDate.getDay();
             let newEndDate=info.event.end||newStartDate;
             let newStarDateUTC=newStartDate.toISOString().slice(0,10);
             let newEndDateUTC=newEndDate.toISOString().slice(0,10);
-
             $.ajax({
                 method:'PUT',
                 url:`/event/${eventId}`,
                 data:{
-                    start_date:newStarDateUTC,
-                    end_date:newEndDateUTC,
+                    year: year,
+                    weekNumber: weekNumber,
+                    dayOfWeek: dayOfWeek,
                 },
                 success:function()
                 {

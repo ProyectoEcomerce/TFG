@@ -9,6 +9,8 @@ class Week extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['year', 'n_week'];
+
     public function tourns(){
         return $this->hasMany(Tourn::class);
     }

@@ -14,7 +14,7 @@ class WeekSeeder extends Seeder
     public function run(): void
     {
         Week::create([
-            'n_week'=>7,
+            'n_week'=>14,
             'year'=>2024,
         ]);
     }
