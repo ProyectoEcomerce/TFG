@@ -41,11 +41,11 @@ class TournController extends Controller
         $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
 
         // Calcular la fecha del día de la disponibilidad segun el día de la semana
-        $availabilityDate = $startOfWeek->copy()->addDays($tourn->n_day - 1);
+        $tournDate = $startOfWeek->copy()->addDays($tourn->n_day - 1);
             $events[]=[
-                'title'=> $tourn->type_turn,
-                'start'=> $availabilityDate->copy()->setTimeFromTimeString('08:00'),
-                'end'=>$availabilityDate->copy()->setTimeFromTimeString('12:00'),
+                'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
+                'start'=> $tournDate->copy()->setTimeFromTimeString('08:00'),
+                'end'=>$tournDate->copy()->setTimeFromTimeString('12:00'),
                 'id'=>$tourn->id
             ];
         }

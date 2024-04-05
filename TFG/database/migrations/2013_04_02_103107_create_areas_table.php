@@ -15,6 +15,12 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('area_name', 30);
+            $table->time('mañana_start_time')->nullable();
+            $table->time('mañana_end_time')->nullable();
+            $table->time('tarde_start_time')->nullable();
+            $table->time('tarde_end_time')->nullable();
+            $table->time('noche_start_time')->nullable();
+            $table->time('noche_end_time')->nullable();
         });
     }
 

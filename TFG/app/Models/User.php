@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Tourn::class);
     }
 
-    public function areas(){
+    public function area(){
         return $this->belongsTo(Area::class);
     }
 

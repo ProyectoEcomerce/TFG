@@ -6,6 +6,7 @@ use App\Models\Availability;
 use App\Models\Week;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class AvailabilityController extends Controller
@@ -17,23 +18,45 @@ class AvailabilityController extends Controller
     }
 
     public function getAvailability(){
-        $availabilities= Availability::all();
+        $user = Auth::user();
+        $availabilities= Availability::where('user_id', $user->id)->get();
+        $area = $user->area; //Area al que pertenece el user
         $events=[];
         foreach($availabilities as $availability){
-        $year = $availability->week->year;
-        $weekNumber = $availability->week->n_week;
+            $year = $availability->week->year;
+            $weekNumber = $availability->week->n_week;
+    
+            // Calcular la fecha del primer día de la semana segun el año
+            $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
+    
+            // Calcular la fecha del día de la disponibilidad segun el día de la semana
+            $availabilityDate = $startOfWeek->copy()->addDays($availability->n_day - 1);
 
-        // Calcular la fecha del primer día de la semana segun el año
-        $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
-
-        // Calcular la fecha del día de la disponibilidad segun el día de la semana
-        $availabilityDate = $startOfWeek->copy()->addDays($availability->n_day - 1);
-            $events[]=[
-                'title'=> $availability->avaibility,
-                'start'=> $availabilityDate->copy()->setTimeFromTimeString('08:00'),
-                'end'=>$availabilityDate->copy()->setTimeFromTimeString('12:00'),
-                'id'=>$availability->id
-            ];
+            $tournStart = null;
+            $tournEnd = null;
+            switch ($availability->avaibility) {
+                case 'mañana':
+                    $tournStart = $area->mañana_start_time;
+                    $tournEnd = $area->mañana_end_time;
+                    break;
+                case 'tarde':
+                    $tournStart = $area->tarde_start_time;
+                    $tournEnd = $area->tarde_end_time;
+                    break;
+                case 'noche':
+                    $tournStart = $area->noche_start_time;
+                    $tournEnd = $area->noche_end_time;
+                    break;
+                default:
+                    break;
+            }
+            Log::info($tournStart);
+                $events[]=[
+                    'title'=>"Turno de " . $availability->avaibility . " de " . $availability->user->name,
+                    'start'=> $availabilityDate->copy()->setTimeFromTimeString($tournStart),
+                    'end'=>$availabilityDate->copy()->setTimeFromTimeString($tournEnd),
+                    'id'=>$availability->id
+                ];
         }
         return response()->json($events);
     }
