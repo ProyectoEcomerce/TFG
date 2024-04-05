@@ -35,7 +35,7 @@ class AvailabilityController extends Controller
             $tournStart = null;
             $tournEnd = null;
             switch ($availability->avaibility) {
-                case 'mañana':
+                case 'manana':
                     $tournStart = $area->mañana_start_time;
                     $tournEnd = $area->mañana_end_time;
                     break;
@@ -72,14 +72,43 @@ class AvailabilityController extends Controller
         $year = $request->year;
         $weekNumber = $request->weekNumber;
         $dayOfWeek = $request->dayOfWeek == 0 ? 7 : $request->dayOfWeek ;
-        $week = Week::updateOrCreate(
-            ['year' => $year, 'n_week' => $weekNumber],
-            ['year' => $year, 'n_week' => $weekNumber]
-        );
-        $availability->update([
-            'n_day' => $dayOfWeek,// Sumar 1 ya que el índice de los días de la semana comienza en 0
-            'week_id' => $week->id
-        ]);
-        return response()->json(['message'=>'El evento se ha modificado']);
+
+        $area= Auth::user()->area;
+
+        $startHour = $request->startHour;
+        $endHour = Carbon::parse($request->endHour);
+        
+        //Con la hora recibida comparamos si corresponde a algun turno
+        switch ($startHour) {
+            case $area->mañana_start_time:
+                    $availability->update([
+                        'n_day' => $dayOfWeek,
+                        'avaibility' => 'manana',
+                        'week_id' => Week::updateOrCreate(['year' => $year, 'n_week' => $weekNumber], ['year' => $year, 'n_week' => $weekNumber])->id
+                    ]);
+                    return response()->json(['message' => 'El evento se ha modificado']);
+
+                break;
+            case $area->tarde_start_time:
+                    // Las horas coinciden con el turno de la tarde del área
+                    $availability->update([
+                        'n_day' => $dayOfWeek,
+                        'avaibility' => 'tarde',
+                        'week_id' => Week::updateOrCreate(['year' => $year, 'n_week' => $weekNumber], ['year' => $year, 'n_week' => $weekNumber])->id
+                    ]);
+                    return response()->json(['message' => 'El evento se ha modificado']);
+                break;
+            case $area->noche_start_time:
+                    // Las horas coinciden con el turno de la noche del área
+                    $availability->update([
+                        'n_day' => $dayOfWeek,
+                        'avaibility' => 'noche',
+                        'week_id' => Week::updateOrCreate(['year' => $year, 'n_week' => $weekNumber], ['year' => $year, 'n_week' => $weekNumber])->id
+                    ]);
+                    return response()->json(['message' => 'El evento se ha modificado']);
+                break;
+            default:
+                return response()->json(['message' => 'El evento no se puede modificar'], 400);
+        }
     }
 }
