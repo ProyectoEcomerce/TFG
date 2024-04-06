@@ -17,6 +17,20 @@ class AvailabilityController extends Controller
         return view('availability');
     }
 
+    public function createAvailability(){
+        $availabilities= Availability::all();
+
+        foreach ($availabilities as $availability){
+            Availability::firstOrCreate([
+                'n_day' => $availability->n_day,
+                'type_turn' => $availability->avaibility,
+                'user_id'=> $availability->user_id,
+                'week_id' => $availability->week_id
+            ]);
+        }
+        return response()->json(['message' => 'Turnos creados exitosamente']);
+    }
+
     public function getAvailability(){
         $user = Auth::user();
         $availabilities= Availability::where('user_id', $user->id)->get();

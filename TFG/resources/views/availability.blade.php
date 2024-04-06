@@ -4,12 +4,35 @@
 
 @section('content')
 <div class="container mt-5">
+    <button id="createAvailabilityModal"><a href="#createAvailabilityModal" data-bs-toggle="modal"
+        data-bs-target="#createAvailabilityModal" class="btn btn-warning btn-sm d-inline-block"> Crear disponibilidad
+    </a></button>
     <div class="card">
         <div class="card-body">
             <div id='calendar'></div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="createAvailabilityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Crear solicitud de turno</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Aquí coloca los campos del formulario para crear la disponibilidad -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="submitAvailability">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @endsection
 
@@ -117,6 +140,19 @@
           }
         });
         calendar.render();
+        $('#createAvailabilityButton').click(function() {
+            $.ajax({
+                method: 'POST',
+                url: '/create-availability',
+                success: function(response) {
+                    console.log(response.message);
+                    calendar.refetchEvents();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al llenar los turnos', error);
+                }
+            });
+        });
       });
 
     </script>

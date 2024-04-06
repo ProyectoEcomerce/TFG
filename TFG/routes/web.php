@@ -40,6 +40,8 @@ Route::put('/updateTourns/{id}', [TournController::class, 'updateTourn']);
 
 Route::post('/fill-tourns', [TournController::class, 'fillTourns'])->name('/fill-tourns');
 
+Route::post('/create-availability', [AvailabilityController::class, 'createAvailability'])->name('/create-availability');
+
 Route::get('/getAvailability', [AvailabilityController::class, 'getAvailability']);
 
 Route::delete('/deleteAvailability/{id}', [AvailabilityController::class, 'deleteAvailability']);
