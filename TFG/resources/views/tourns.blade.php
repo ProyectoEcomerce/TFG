@@ -4,13 +4,46 @@
 
 @section('content')
 <div class="container mt-5">
-    <button id="fillTurnosButton">Llenar Turnos</button>
+    <button id="fillTurnosButton" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas')">Llenar con disponibilidades</button>
+    <div class="d-flex justify-content-center">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#createTournModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear nuevo turno</a>
+    </div>
     <div class="card">
         <div class="card-body">
             <div id='calendar'></div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="createTournModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crear turno</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="tournForm" method="POST">
+            @csrf
+            <label>Seleccionar usuario</label>
+            <input type="text" id="nameUser" name="nameUser" class="form-control mb-2" required>
+            <label>Dia disponible</label>
+            <input type="date" id="dateTourn" name="dateTourn" class="form-control mb-2" required>
+            <label>Tipo de turno</label>
+            <select name="typeTurn" id="typeTurn">
+                <option value="manana">Mañana</option>
+                <option value="tarde">Tarde</option>
+                <option value="noche">Noche</option>
+            </select>
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres crear esta disponibilidad?')">
+                Guarda Turno
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @endsection
 
@@ -115,8 +148,45 @@
                 }
             });
         });
+        $('#tournForm').submit(function(e) {
+            e.preventDefault();
+            let selectedDate = $('#dateTourn').val();
+    
+            // Convertir la fecha seleccionada a un objeto Date
+            let dateObject = new Date(selectedDate);
+
+            // Obtener la fecha en formato Carbon
+            let dateCarbon= moment(selectedDate);
+            
+            // Obtener el día de la semana (0 para domingo, 1 para lunes, etc.)
+            let dayOfWeek = dateObject.getDay();
+        
+            let year = dateCarbon.year();
+            let weekNumber = dateCarbon.isoWeek();
+            
+            let selectedTurns = $('#typeTurn').val();
+
+            let userName = $('#nameUser').val();
+            $.ajax({
+                method: 'POST',
+                url: '/create-tourn',
+                data: {
+                    dayOfWeek: dayOfWeek,
+                    weekNumber: weekNumber,
+                    year: year,
+                    typeTurn: selectedTurns,
+                    userName: userName
+                },
+                success: function(response) {
+                    console.log(response.message);
+                    $('#createTournModal').modal('hide');
+                    calendar.refetchEvents();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al llenar los turnos', error);
+                }
+            });
+        });
       });
-
-
     </script>
 @endsection

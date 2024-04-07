@@ -9,13 +9,14 @@ use App\Models\User;
 use App\Models\Week;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TournController extends Controller
 {
     public function index($id)
     {
-        Log::info($id);
         $area = Area::findOrFail($id);
         return view('tourns', compact('area'));
     }
@@ -34,6 +35,29 @@ class TournController extends Controller
             }
         }
         return response()->json(['message' => 'Turnos creados exitosamente']);
+    }
+
+    public function createTourn(Request $request){
+        DB::beginTransaction();
+        try{
+            $user= User::where('name', $request->userName)->first();
+            $week=Week::firstOrCreate([
+                'n_week'=>$request->weekNumber,
+                'year'=>$request->year
+            ]);
+            $newTourn = new Tourn();
+            $newTourn->n_day =$request->dayOfWeek == 0 ? 7 : $request->dayOfWeek;
+            $newTourn->type_turn= $request->typeTurn;
+            $newTourn->user_id = $user->id;
+            $newTourn->week_id =$week->id;
+            $newTourn->save();
+
+            DB::commit();
+            return response()->json(['message' => 'Turnos creados exitosamente']);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'No se han podido crear los turnos']);
+        }
     }
 
     public function getTourns($id){
