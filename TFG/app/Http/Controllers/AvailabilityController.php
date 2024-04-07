@@ -7,6 +7,7 @@ use App\Models\Week;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AvailabilityController extends Controller
@@ -17,18 +18,27 @@ class AvailabilityController extends Controller
         return view('availability');
     }
 
-    public function createAvailability(){
-        $availabilities= Availability::all();
-
-        foreach ($availabilities as $availability){
-            Availability::firstOrCreate([
-                'n_day' => $availability->n_day,
-                'type_turn' => $availability->avaibility,
-                'user_id'=> $availability->user_id,
-                'week_id' => $availability->week_id
+    public function createAvailability(Request $request){
+        DB::beginTransaction();
+        try{
+            $user= Auth::user();
+            $week=Week::firstOrCreate([
+                'n_week'=>$request->weekNumber,
+                'year'=>$request->year
             ]);
+            $newAvailability = new Availability();
+            $newAvailability->n_day =$request->dayOfWeek == 0 ? 7 : $request->dayOfWeek;
+            $typeTurn = implode(',', $request->typeTurn);
+            $newAvailability->avaibility= $typeTurn;
+            $newAvailability->user_id = $user->id;
+            $newAvailability->week_id =$week->id;
+            $newAvailability->save();
+            DB::commit();
+            return response()->json(['message' => 'Turnos creados exitosamente']);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'No se han podido crear los turnos']);
         }
-        return response()->json(['message' => 'Turnos creados exitosamente']);
     }
 
     public function getAvailability(){
@@ -64,7 +74,6 @@ class AvailabilityController extends Controller
                 default:
                     break;
             }
-            Log::info($tournStart);
                 $events[]=[
                     'title'=>"Turno de " . $availability->avaibility . " de " . $availability->user->name,
                     'start'=> $availabilityDate->copy()->setTimeFromTimeString($tournStart),

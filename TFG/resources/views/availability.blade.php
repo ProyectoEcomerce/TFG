@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="container mt-5">
-    <button id="createAvailabilityModal"><a href="#createAvailabilityModal" data-bs-toggle="modal"
-        data-bs-target="#createAvailabilityModal" class="btn btn-warning btn-sm d-inline-block"> Crear disponibilidad
-    </a></button>
+    <div class="d-flex justify-content-center">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#createAvailabilityModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear disponibilidad</a>
+    </div>
     <div class="card">
         <div class="card-body">
             <div id='calendar'></div>
@@ -14,21 +14,36 @@
     </div>
 </div>
 
-<div class="modal fade" id="createAvailabilityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="createAvailabilityModal">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Crear solicitud de turno</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <h5 class="modal-title">Crear solicitud de turno</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </button>
         </div>
         <div class="modal-body">
-          <!-- Aquí coloca los campos del formulario para crear la disponibilidad -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" id="submitAvailability">Guardar</button>
+          <form id="availabilityForm" method="POST">
+            @csrf
+            <label>Dia disponible</label>
+            <input type="date" id="dateAvai" name="dateAvai" class="form-control mb-2" required>
+            <label>Tipo de turno</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="typeTurn" id="turno1" value="manana">
+                <label class="form-check-label" for="turno1">Mañana</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="typeTurn" id="turno2" value="tarde">
+                <label class="form-check-label" for="turno2">Tarde</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="typeTurn" id="turno3" value="noche">
+                <label class="form-check-label" for="turno3">Noche</label>
+            </div>
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres crear esta disponibilidad?')">
+                Guarda disponibilidad
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -39,7 +54,6 @@
 @section('scripts')
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -140,12 +154,38 @@
           }
         });
         calendar.render();
-        $('#createAvailabilityButton').click(function() {
+        $('#availabilityForm').submit(function(e) {
+            e.preventDefault();
+            let selectedDate = $('#dateAvai').val();
+    
+            // Convertir la fecha seleccionada a un objeto Date
+            let dateObject = new Date(selectedDate);
+
+            // Obtener la fecha en formato Carbon
+            let dateCarbon= moment(selectedDate);
+            
+            // Obtener el día de la semana (0 para domingo, 1 para lunes, etc.)
+            let dayOfWeek = dateObject.getDay();
+        
+            let year = dateCarbon.year();
+            let weekNumber = dateCarbon.isoWeek();
+            
+            let selectedTurns = [];
+            $('input[name="typeTurn"]:checked').each(function() {
+                selectedTurns.push($(this).val());
+            });
             $.ajax({
                 method: 'POST',
                 url: '/create-availability',
+                data: {
+                    dayOfWeek: dayOfWeek,
+                    weekNumber: weekNumber,
+                    year: year,
+                    typeTurn: selectedTurns
+                },
                 success: function(response) {
                     console.log(response.message);
+                    $('#createAvailabilityModal').modal('hide');
                     calendar.refetchEvents();
                 },
                 error: function(xhr, status, error) {
