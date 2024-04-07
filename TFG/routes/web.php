@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TournController;
@@ -28,17 +29,17 @@ Route::get('/home', function(){
 
 Route::get('/inicio', [HomeController::class, 'index'])->name('home');
 
-Route::get('/tourns', [TournController::class, 'index'])->name('tourns');
+Route::get('/tourns/{id}', [TournController::class, 'index'])->name('show.area');
 
 Route::get('/avai', [AvailabilityController::class, 'index'])->name('availability');
 
-Route::get('/getTourns', [TournController::class, 'getTourns']);
+Route::get('/getTourns/{id}', [TournController::class, 'getTourns']);
 
 Route::delete('/deleteTourns/{id}', [TournController::class, 'deleteTourn']);
 
 Route::put('/updateTourns/{id}', [TournController::class, 'updateTourn']);
 
-Route::post('/fill-tourns', [TournController::class, 'fillTourns'])->name('/fill-tourns');
+Route::post('/fill-tourns/{id}', [TournController::class, 'fillTourns'])->name('/fill-tourns/{id}');
 
 Route::post('/create-availability', [AvailabilityController::class, 'createAvailability'])->name('/create-availability');
 
@@ -47,3 +48,5 @@ Route::get('/getAvailability', [AvailabilityController::class, 'getAvailability'
 Route::delete('/deleteAvailability/{id}', [AvailabilityController::class, 'deleteAvailability']);
 
 Route::put('/updateAvailability/{id}', [AvailabilityController::class, 'updateAvailability']);
+
+Route::get('/inicio' , [AreaController::class, 'getAreas']);

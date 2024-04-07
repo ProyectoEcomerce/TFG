@@ -26,13 +26,14 @@ class AvailabilityController extends Controller
                 'n_week'=>$request->weekNumber,
                 'year'=>$request->year
             ]);
-            $newAvailability = new Availability();
-            $newAvailability->n_day =$request->dayOfWeek == 0 ? 7 : $request->dayOfWeek;
-            $typeTurn = implode(',', $request->typeTurn);
-            $newAvailability->avaibility= $typeTurn;
-            $newAvailability->user_id = $user->id;
-            $newAvailability->week_id =$week->id;
-            $newAvailability->save();
+            foreach ($request->typeTurn as $type) {
+                $newAvailability = new Availability();
+                $newAvailability->n_day =$request->dayOfWeek == 0 ? 7 : $request->dayOfWeek;
+                $newAvailability->avaibility= $type;
+                $newAvailability->user_id = $user->id;
+                $newAvailability->week_id =$week->id;
+                $newAvailability->save();
+            }
             DB::commit();
             return response()->json(['message' => 'Turnos creados exitosamente']);
         }catch(\Exception $e){

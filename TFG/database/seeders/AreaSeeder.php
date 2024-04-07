@@ -22,5 +22,15 @@ class AreaSeeder extends Seeder
             'noche_start_time'=>'22:00',
             'noche_end_time'=>'04:00',
         ]);
+
+        Area::create([
+            'area_name'=> 'Marketing',
+            'mañana_start_time'=>'09:00',
+            'mañana_end_time'=>'15:00',
+            'tarde_start_time'=>'16:00',
+            'tarde_end_time'=>'22:00',
+            'noche_start_time'=>'23:00',
+            'noche_end_time'=>'05:00',
+        ]);
     }
 }

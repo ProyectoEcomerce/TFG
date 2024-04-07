@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\Availability;
 use App\Models\Tourn;
+use App\Models\User;
 use App\Models\Week;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,43 +13,51 @@ use Illuminate\Support\Facades\Log;
 
 class TournController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        return view('tourns');
+        Log::info($id);
+        $area = Area::findOrFail($id);
+        return view('tourns', compact('area'));
     }
 
-    public function fillTourns(){
-        $availabilities= Availability::all();
-
-        foreach ($availabilities as $availability){
-            Tourn::firstOrCreate([
-                'n_day' => $availability->n_day,
-                'type_turn' => $availability->avaibility,
-                'user_id'=> $availability->user_id,
-                'week_id' => $availability->week_id
-            ]);
+    public function fillTourns($id){
+        $users= User::where('area_id', $id)->get();
+        foreach($users as $user){
+            $availabilities = $user->availability()->get();
+            foreach ($availabilities as $availability){
+                Tourn::firstOrCreate([
+                    'n_day' => $availability->n_day,
+                    'type_turn' => $availability->avaibility,
+                    'user_id'=> $availability->user_id,
+                    'week_id' => $availability->week_id
+                ]);
+            }
         }
         return response()->json(['message' => 'Turnos creados exitosamente']);
     }
 
-    public function getTourns(){
-        $tourns= Tourn::all();
+    public function getTourns($id){
+        $users= User::where('area_id', $id)->get();
         $events=[];
-        foreach($tourns as $tourn){
-        $year = $tourn->week->year;
-        $weekNumber = $tourn->week->n_week;
 
-        // Calcular la fecha del primer día de la semana segun el año
-        $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
-
-        // Calcular la fecha del día de la disponibilidad segun el día de la semana
-        $tournDate = $startOfWeek->copy()->addDays($tourn->n_day - 1);
-            $events[]=[
-                'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
-                'start'=> $tournDate->copy()->setTimeFromTimeString('08:00'),
-                'end'=>$tournDate->copy()->setTimeFromTimeString('12:00'),
-                'id'=>$tourn->id
-            ];
+        foreach($users as $user){
+            $tourns = $user->tourns()->get();
+            foreach($tourns as $tourn){
+                $year = $tourn->week->year;
+                $weekNumber = $tourn->week->n_week;
+        
+                // Calcular la fecha del primer día de la semana segun el año
+                $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
+        
+                // Calcular la fecha del día de la disponibilidad segun el día de la semana
+                $tournDate = $startOfWeek->copy()->addDays($tourn->n_day - 1);
+                    $events[]=[
+                        'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
+                        'start'=> $tournDate->copy()->setTimeFromTimeString('08:00'),
+                        'end'=>$tournDate->copy()->setTimeFromTimeString('12:00'),
+                        'id'=>$tourn->id
+                    ];
+            }
         }
         return response()->json($events);
     }

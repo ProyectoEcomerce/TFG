@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'manuelsr0113@gmail.com',
             'password' => bcrypt('12345678'),
-            'area_id' => 1
+            'area_id' => 2
         ]);
 
         $adminRole = Role::where('role', 'admin')->first();

@@ -56,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function availability(){
-        return $this->hasMany(Area::class);
+        return $this->hasMany(Availability::class);
     }
 
     public function hasRole($roleName)

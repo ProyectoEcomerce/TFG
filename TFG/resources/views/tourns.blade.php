@@ -35,7 +35,7 @@
             },
           initialView: 'dayGridMonth',
           timeZone: 'UTC + 01:00',
-          events:'/getTourns',
+          events:'/getTourns/{{$area->id}}',
           editable: true,
 
           //Eliminar
@@ -105,7 +105,7 @@
         $('#fillTurnosButton').click(function() {
             $.ajax({
                 method: 'POST',
-                url: '/fill-tourns',
+                url: '/fill-tourns/{{$area->id}}',
                 success: function(response) {
                     console.log(response.message);
                     calendar.refetchEvents();
