@@ -18,7 +18,8 @@ class TournController extends Controller
     public function index($id)
     {
         $area = Area::findOrFail($id);
-        return view('tourns', compact('area'));
+        $users= User::where('area_id', $id)->get();
+        return view('tourns', compact('area', 'users'));
     }
 
     public function fillTourns($id){

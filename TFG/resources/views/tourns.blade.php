@@ -27,7 +27,11 @@
           <form id="tournForm" method="POST">
             @csrf
             <label>Seleccionar usuario</label>
-            <input type="text" id="nameUser" name="nameUser" class="form-control mb-2" required>
+            <select id="nameUser" name="nameUser" class="form-control mb-2" required>
+                @foreach($users as $user)
+                    <option value="{{$user->name}}">{{$user->name}}</option>
+                @endforeach
+            </select>
             <label>Dia disponible</label>
             <input type="date" id="dateTourn" name="dateTourn" class="form-control mb-2" required>
             <label>Tipo de turno</label>
