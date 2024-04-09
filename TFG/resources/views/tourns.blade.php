@@ -107,19 +107,32 @@
           eventDrop:function(info){
             let eventId = info.event.id;
             let newStartDate = info.event.start;
+            let newEndDate = info.event.end;
         
             // Convertir la fecha de inicio del evento a un objeto Date
             let startDate = new Date(newStartDate);
+            let endDate = new Date(newEndDate);
         
             // Convertir la fecha de inicio del evento a un objeto Carbon
             let startDateCarbon = moment(startDate);
-        
+            let endDateCarbon = moment(endDate);
+
             // Obtener el año y el número de semana
             let year = startDateCarbon.year();
             let weekNumber = startDateCarbon.isoWeek();
         
             // Obtener el número del día de la semana (0 para domingo, 1 para lunes, etc.)
             let dayOfWeek = startDate.getDay();
+
+            //Sacar horas y minutos en el formato correcto
+            let startHoursUTC = newStartDate.getUTCHours();
+            let startMinutesUTC = newStartDate.getUTCMinutes();
+            let startTime = startHoursUTC.toString().padStart(2, '0') + ":" + startMinutesUTC.toString().padStart(2, '0') + ":" + "00";
+            
+            let endHoursUTC = newEndDate.getUTCHours();
+            let endMinutesUTC = newEndDate.getUTCMinutes();
+            let endTime = endHoursUTC.toString().padStart(2, '0') + ":" + endMinutesUTC.toString().padStart(2, '0') + ":" + "00";
+
             $.ajax({
                 method:'PUT',
                 url:`/updateTourns/${eventId}`,
@@ -127,13 +140,15 @@
                     year: year,
                     weekNumber: weekNumber,
                     dayOfWeek: dayOfWeek,
+                    startHour: startTime,
+                    endHour: endTime
                 },
                 success:function()
                 {
                     console.log('Se ha movido el evento');
                 },
                 error:function(error){
-                    console.log('Error al mover el evento', error);
+                    alert('No hay turnos en este horario');
                 }
             });
           }

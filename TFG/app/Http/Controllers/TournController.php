@@ -63,6 +63,7 @@ class TournController extends Controller
 
     public function getTourns($id){
         $users= User::where('area_id', $id)->get();
+        $area= Area::findOrFail($id);
         $events=[];
 
         foreach($users as $user){
@@ -76,10 +77,29 @@ class TournController extends Controller
         
                 // Calcular la fecha del día de la disponibilidad segun el día de la semana
                 $tournDate = $startOfWeek->copy()->addDays($tourn->n_day - 1);
+
+                $tournStart = null;
+                $tournEnd = null;
+                switch ($tourn->type_turn) {
+                    case 'manana':
+                        $tournStart = $area->mañana_start_time;
+                        $tournEnd = $area->mañana_end_time;
+                        break;
+                    case 'tarde':
+                        $tournStart = $area->tarde_start_time;
+                        $tournEnd = $area->tarde_end_time;
+                        break;
+                    case 'noche':
+                        $tournStart = $area->noche_start_time;
+                        $tournEnd = $area->noche_end_time;
+                        break;
+                    default:
+                        break;
+                }
                     $events[]=[
                         'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
-                        'start'=> $tournDate->copy()->setTimeFromTimeString('08:00'),
-                        'end'=>$tournDate->copy()->setTimeFromTimeString('12:00'),
+                        'start'=> $tournDate->copy()->setTimeFromTimeString($tournStart),
+                        'end'=>$tournDate->copy()->setTimeFromTimeString($tournEnd),
                         'id'=>$tourn->id
                     ];
             }
