@@ -5,6 +5,7 @@
 @section('content')
 <div class="container mt-5">
     <button id="fillTurnosButton" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas')">Llenar con disponibilidades</button>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#fillTurnosModal" class="btn btn-success mb-5">Llenar con disponibilidades</a>
     <div class="d-flex justify-content-center">
         <a href="#" data-bs-toggle="modal" data-bs-target="#createTournModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear nuevo turno</a>
     </div>
@@ -40,8 +41,32 @@
                 <option value="tarde">Tarde</option>
                 <option value="noche">Noche</option>
             </select>
-            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres crear esta disponibilidad?')">
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres crear este turno?')">
                 Guarda Turno
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="fillTurnosModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Selecciona el intervalo para llenar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="fillTournForm" method="POST">
+            @csrf
+            <label>Inicio intervalo</label>
+            <input type="date" id="startInterval" name="startInterval" class="form-control mb-2" required>
+            <label>Final intervalo</label>
+            <input type="date" id="endInterval" name="endInterval" class="form-control mb-2" required>
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas, ¿Quieres continuar?')">
+                Llenar intervalo
             </button>
           </form>
         </div>
@@ -159,10 +184,18 @@
           }
         });
         calendar.render();
-        $('#fillTurnosButton').click(function() {
+        $('#fillTournForm').submit(function(e) {
+            e.preventDefault();
+            let startDate = $('#startInterval').val();
+            let endDate = $('#endInterval').val();
+
             $.ajax({
                 method: 'POST',
                 url: '/fill-tourns/{{$area->id}}',
+                data:{
+                    startDate : startDate,
+                    endDate : endDate
+                },
                 success: function(response) {
                     console.log(response.message);
                     calendar.refetchEvents();

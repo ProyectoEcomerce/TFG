@@ -22,20 +22,50 @@ class TournController extends Controller
         return view('tourns', compact('area', 'users'));
     }
 
-    public function fillTourns($id){
-        $users= User::where('area_id', $id)->get();
-        foreach($users as $user){
-            $availabilities = $user->availability()->get();
-            foreach ($availabilities as $availability){
-                Tourn::firstOrCreate([
-                    'n_day' => $availability->n_day,
-                    'type_turn' => $availability->avaibility,
-                    'user_id'=> $availability->user_id,
-                    'week_id' => $availability->week_id
-                ]);
+    public function fillTourns(Request $request, $id){
+        DB::beginTransaction();
+        try{
+            $startDate = $request->startDate;
+            $endDate = $request->endDate;
+        
+            // Convertir las fechas de inicio y fin a objetos Carbon
+            $startCarbon = Carbon::parse($startDate);
+            $endCarbon = Carbon::parse($endDate);
+
+            $users= User::where('area_id', $id)->get();
+            $availabilities = [];
+
+            //Buscamos las disponibilidades de los usuarios que coincidan con el intervalo
+            foreach ($users as $user) {
+                $userAvailabilities = $user->availability()
+                ->whereHas('week', function ($query) use ($startCarbon, $endCarbon) {
+                    $query->whereBetween('year', [$startCarbon->year, $endCarbon->year])
+                          ->whereBetween('n_week', [$startCarbon->isoWeek(), $endCarbon->isoWeek()]);
+                })
+                ->get();
+
+            if ($userAvailabilities->isNotEmpty()) {
+                $availabilities[$user->id] = $userAvailabilities->toArray();
             }
+
+            }
+            //Iteramos por las disponibilidades asociadas a cada usuario y luego por sus propias disponibilidades
+            foreach ($availabilities as $userId => $userAvailabilities) {
+                foreach ($userAvailabilities as $availability) {
+                    Tourn::firstOrCreate([
+                        'n_day' => $availability['n_day'],
+                        'type_turn' => $availability['avaibility'],
+                        'user_id'=> $availability['user_id'],
+                        'week_id' => $availability['week_id']
+                    ]);
+                }
+            }
+            DB::commit();
+            return response()->json(['message' => 'Turnos creados exitosamente']);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'No se han podido crear los turnos']);
         }
-        return response()->json(['message' => 'Turnos creados exitosamente']);
     }
 
     public function createTourn(Request $request){
@@ -101,7 +131,6 @@ class TournController extends Controller
                     default:
                         break;
                 }
-                Log::info($tournDate);
                     $events[]=[
                         'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
                         'start'=> $tournDate->copy()->setTimeFromTimeString($tournStart),
@@ -126,7 +155,6 @@ class TournController extends Controller
         $dayOfWeek = $request->dayOfWeek == 0 ? 7 : $request->dayOfWeek ;
 
         $area= Area::findOrFail($request->areaId);
-        Log::info($area);
 
         $startHour = $request->startHour;
         $endHour = Carbon::parse($request->endHour);
