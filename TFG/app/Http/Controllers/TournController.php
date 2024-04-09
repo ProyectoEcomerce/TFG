@@ -93,11 +93,9 @@ class TournController extends Controller
                     case 'noche':
                         $tournStart = $area->noche_start_time;
                         $tournEnd = $area->noche_end_time;
-
                         if (Carbon::parse($tournEnd)->greaterThan(Carbon::parse('00:00'))) {
-                            $tournDateEnd = $tournDate->copy()->addDay();
-                        } else {
-                            $tournDateEnd = $tournDate->copy();
+                            $tournDateEnd = $tournDate->copy(); // Creas una copia de la fecha de inicio
+                            $tournDateEnd->addDay(); // Le sumas un día a la fecha de inicio
                         }
                         break;
                     default:
@@ -107,7 +105,7 @@ class TournController extends Controller
                     $events[]=[
                         'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
                         'start'=> $tournDate->copy()->setTimeFromTimeString($tournStart),
-                        'end'=>$tournDate->copy()->setTimeFromTimeString($tournEnd),
+                        'end' => $tournDateEnd ? $tournDateEnd->copy()->setTimeFromTimeString($tournEnd) : $tournDate->copy()->setTimeFromTimeString($tournEnd),
                         'id'=>$tourn->id
                     ];
             }

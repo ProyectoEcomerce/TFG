@@ -58,6 +58,7 @@ class AvailabilityController extends Controller
             $availabilityDate = $startOfWeek->copy()->addDays($availability->n_day - 1);
 
             $tournStart = null;
+            $tournDateEnd=null;
             $tournEnd = null;
             switch ($availability->avaibility) {
                 case 'manana':
@@ -71,6 +72,10 @@ class AvailabilityController extends Controller
                 case 'noche':
                     $tournStart = $area->noche_start_time;
                     $tournEnd = $area->noche_end_time;
+                    if (Carbon::parse($tournEnd)->greaterThan(Carbon::parse('00:00'))) {
+                        $tournDateEnd = $availabilityDate->copy(); // Creas una copia de la fecha de inicio
+                        $tournDateEnd->addDay(); // Le sumas un día a la fecha de inicio
+                    }
                     break;
                 default:
                     break;
@@ -78,7 +83,7 @@ class AvailabilityController extends Controller
                 $events[]=[
                     'title'=>"Turno de " . $availability->avaibility . " de " . $availability->user->name,
                     'start'=> $availabilityDate->copy()->setTimeFromTimeString($tournStart),
-                    'end'=>$availabilityDate->copy()->setTimeFromTimeString($tournEnd),
+                    'end' => $tournDateEnd ? $tournDateEnd->copy()->setTimeFromTimeString($tournEnd) : $availabilityDate->copy()->setTimeFromTimeString($tournEnd),
                     'id'=>$availability->id
                 ];
         }

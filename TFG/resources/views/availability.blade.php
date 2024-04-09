@@ -108,31 +108,33 @@
             let eventId = info.event.id;
             let newStartDate = info.event.start;
             let newEndDate = info.event.end;
-        
-            // Convertir la fecha de inicio del evento a un objeto Date
+
+            // Convertir la fecha a hora local
             let startDate = new Date(newStartDate);
             let endDate = new Date(newEndDate);
-        
+
+            let startDateLocal = new Date(startDate.getTime() + startDate.getTimezoneOffset() * 60000);
+            let endDateLocal = new Date(endDate.getTime() + endDate.getTimezoneOffset() * 60000);
+
             // Convertir la fecha de inicio del evento a un objeto Carbon
-            let startDateCarbon = moment(startDate);
-            let endDateCarbon = moment(endDate);
-        
+            let startDateCarbon = moment(startDateLocal);
+            let endDateCarbon = moment(endDateLocal);
+
             // Obtener el año y el número de semana
             let year = startDateCarbon.year();
             let weekNumber = startDateCarbon.isoWeek();
         
             // Obtener el número del día de la semana (0 para domingo, 1 para lunes, etc.)
-            let dayOfWeek = startDate.getDay();
+            let dayOfWeek = startDateCarbon.isoWeekday();
 
             //Sacar horas y minutos en el formato correcto
-            let startHoursUTC = newStartDate.getUTCHours();
-            let startMinutesUTC = newStartDate.getUTCMinutes();
-            let startTime = startHoursUTC.toString().padStart(2, '0') + ":" + startMinutesUTC.toString().padStart(2, '0') + ":" + "00";
+            let startHoursLocal = startDateLocal.getHours();
+            let startMinutesLocal = startDateLocal.getMinutes();
+            let startTime = startHoursLocal.toString().padStart(2, '0') + ":" + startMinutesLocal.toString().padStart(2, '0') + ":" + "00";
             
-            let endHoursUTC = newEndDate.getUTCHours();
-            let endMinutesUTC = newEndDate.getUTCMinutes();
-            let endTime = endHoursUTC.toString().padStart(2, '0') + ":" + endMinutesUTC.toString().padStart(2, '0') + ":" + "00";
-
+            let endHoursLocal = endDateLocal.getHours();
+            let endMinutesLocal = endDateLocal.getMinutes();
+            let endTime = endHoursLocal.toString().padStart(2, '0') + ":" + endMinutesLocal.toString().padStart(2, '0') + ":" + "00";
             $.ajax({
                 method:'PUT',
                 url:`/updateAvailability/${eventId}`,
