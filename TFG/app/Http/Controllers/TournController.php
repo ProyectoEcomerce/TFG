@@ -80,6 +80,7 @@ class TournController extends Controller
 
                 $tournStart = null;
                 $tournEnd = null;
+                $tournDateEnd=null;
                 switch ($tourn->type_turn) {
                     case 'manana':
                         $tournStart = $area->mañana_start_time;
@@ -92,10 +93,17 @@ class TournController extends Controller
                     case 'noche':
                         $tournStart = $area->noche_start_time;
                         $tournEnd = $area->noche_end_time;
+
+                        if (Carbon::parse($tournEnd)->greaterThan(Carbon::parse('00:00'))) {
+                            $tournDateEnd = $tournDate->copy()->addDay();
+                        } else {
+                            $tournDateEnd = $tournDate->copy();
+                        }
                         break;
                     default:
                         break;
                 }
+                Log::info($tournDate);
                     $events[]=[
                         'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
                         'start'=> $tournDate->copy()->setTimeFromTimeString($tournStart),
@@ -118,14 +126,43 @@ class TournController extends Controller
         $year = $request->year;
         $weekNumber = $request->weekNumber;
         $dayOfWeek = $request->dayOfWeek == 0 ? 7 : $request->dayOfWeek ;
-        $week = Week::updateOrCreate(
-            ['year' => $year, 'n_week' => $weekNumber],
-            ['year' => $year, 'n_week' => $weekNumber]
-        );
-        $tourn->update([
-            'n_day' => $dayOfWeek,// Sumar 1 ya que el índice de los días de la semana comienza en 0
-            'week_id' => $week->id
-        ]);
-        return response()->json(['message'=>'El evento se ha modificado']);
+
+        $area= Area::findOrFail($request->areaId);
+        Log::info($area);
+
+        $startHour = $request->startHour;
+        $endHour = Carbon::parse($request->endHour);
+        
+        switch ($startHour) {
+            case $area->mañana_start_time:
+                    $tourn->update([
+                        'n_day' => $dayOfWeek,
+                        'type_turn' => 'manana',
+                        'week_id' => Week::updateOrCreate(['year' => $year, 'n_week' => $weekNumber], ['year' => $year, 'n_week' => $weekNumber])->id
+                    ]);
+                    return response()->json(['message' => 'El evento se ha modificado']);
+
+                break;
+            case $area->tarde_start_time:
+                    // Las horas coinciden con el turno de la tarde del área
+                    $tourn->update([
+                        'n_day' => $dayOfWeek,
+                        'type_turn' => 'tarde',
+                        'week_id' => Week::updateOrCreate(['year' => $year, 'n_week' => $weekNumber], ['year' => $year, 'n_week' => $weekNumber])->id
+                    ]);
+                    return response()->json(['message' => 'El evento se ha modificado']);
+                break;
+            case $area->noche_start_time:
+                    // Las horas coinciden con el turno de la noche del área
+                    $tourn->update([
+                        'n_day' => $dayOfWeek,
+                        'type_turn' => 'noche',
+                        'week_id' => Week::updateOrCreate(['year' => $year, 'n_week' => $weekNumber], ['year' => $year, 'n_week' => $weekNumber])->id
+                    ]);
+                    return response()->json(['message' => 'El evento se ha modificado']);
+                break;
+            default:
+                return response()->json(['message' => 'El evento no se puede modificar'], 400);
+        }
     }
 }

@@ -146,6 +146,7 @@
                 success:function()
                 {
                     console.log('Se ha movido el evento');
+                    calendar.refetchEvents();
                 },
                 error:function(error){
                     alert('No hay turnos en este horario');

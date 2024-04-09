@@ -108,7 +108,9 @@
             let eventId = info.event.id;
             let newStartDate = info.event.start;
             let newEndDate = info.event.end;
-        
+            
+            console.log(newStartDate);
+
             // Convertir la fecha de inicio del evento a un objeto Date
             let startDate = new Date(newStartDate);
             let endDate = new Date(newEndDate);
@@ -141,11 +143,13 @@
                     weekNumber: weekNumber,
                     dayOfWeek: dayOfWeek,
                     startHour: startTime,
-                    endHour: endTime
+                    endHour: endTime,
+                    areaId: {{$area->id}}
                 },
                 success:function()
                 {
                     console.log('Se ha movido el evento');
+                    calendar.refetchEvents();
                 },
                 error:function(error){
                     alert('No hay turnos en este horario');
