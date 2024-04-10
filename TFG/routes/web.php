@@ -41,6 +41,8 @@ Route::put('/updateTourns/{id}', [TournController::class, 'updateTourn']);
 
 Route::post('/fill-tourns/{id}', [TournController::class, 'fillTourns'])->name('/fill-tourns/{id}');
 
+Route::post('/deleteIntervaTourns/{id}', [TournController::class, 'deleteIntervalTourns'])->name('/deleteIntervaTourns/{id}');
+
 Route::post('/create-availability', [AvailabilityController::class, 'createAvailability'])->name('/create-availability');
 
 Route::post('/create-tourn', [TournController::class, 'createTourn'])->name('/create-tourn');

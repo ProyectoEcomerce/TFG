@@ -68,6 +68,36 @@ class TournController extends Controller
         }
     }
 
+    public function deleteIntervalTourns(Request $request, $id){
+        DB::beginTransaction();
+        try{
+            $startDate = $request->startDate;
+            $endDate = $request->endDate;
+        
+            // Convertir las fechas de inicio y fin a objetos Carbon
+            $startCarbon = Carbon::parse($startDate);
+            $endCarbon = Carbon::parse($endDate);
+            Log::info($startCarbon);
+            Log::info($endCarbon);
+            $users= User::where('area_id', $id)->get();
+            
+            //Buscamos los turnos de los usuarios que coincidan con el intervalo
+            foreach ($users as $user) {
+                $user->tourns()
+                ->whereHas('week', function ($query) use ($startCarbon, $endCarbon) {
+                    $query->whereBetween('year', [$startCarbon->year, $endCarbon->year])
+                          ->whereBetween('n_week', [$startCarbon->isoWeek(), $endCarbon->isoWeek()]);
+                })
+                ->delete();
+            }
+            DB::commit();
+            return response()->json(['message' => 'Turnos eliminados exitosamente']);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'No se han podido eliminar los turnos']);
+        }
+    }
+
     public function createTourn(Request $request){
         DB::beginTransaction();
         try{

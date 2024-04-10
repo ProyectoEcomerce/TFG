@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="container mt-5">
-    <button id="fillTurnosButton" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas')">Llenar con disponibilidades</button>
     <a href="#" data-bs-toggle="modal" data-bs-target="#fillTurnosModal" class="btn btn-success mb-5">Llenar con disponibilidades</a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteTurnosModal" class="btn btn-success mb-5">Eliminar intervalo turnos</a>
     <div class="d-flex justify-content-center">
         <a href="#" data-bs-toggle="modal" data-bs-target="#createTournModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear nuevo turno</a>
     </div>
@@ -67,6 +67,30 @@
             <input type="date" id="endInterval" name="endInterval" class="form-control mb-2" required>
             <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas, ¿Quieres continuar?')">
                 Llenar intervalo
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteTurnosModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Selecciona el intervalo para eliminar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="deleteTournForm" method="POST">
+            @csrf
+            <label>Inicio intervalo</label>
+            <input type="date" id="startIntervalDelete" name="startIntervalDelete" class="form-control mb-2" required>
+            <label>Final intervalo</label>
+            <input type="date" id="endIntervalDelete" name="endIntervalDelete" class="form-control mb-2" required>
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('Esta acción eliminara los turnos del intervalo seleccionado, ¿Quieres continuar?')">
+                Eliminar turnos
             </button>
           </form>
         </div>
@@ -175,6 +199,7 @@
                 success:function()
                 {
                     console.log('Se ha movido el evento');
+                    $('#fillTurnosModal').modal('hide');
                     calendar.refetchEvents();
                 },
                 error:function(error){
@@ -198,7 +223,31 @@
                 },
                 success: function(response) {
                     console.log(response.message);
+                    $('#deleteTurnosModal').modal('hide');
                     calendar.refetchEvents();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al llenar los turnos', error);
+                }
+            });
+        });
+        $('#deleteTournForm').submit(function(e) {
+            e.preventDefault();
+            let startDate = $('#startIntervalDelete').val();
+            let endDate = $('#endIntervalDelete').val();
+
+            $.ajax({
+                method: 'POST',
+                url: '/deleteIntervaTourns/{{$area->id}}',
+                data:{
+                    startDate : startDate,
+                    endDate : endDate
+                },
+                success: function(response) {
+                    console.log(response.message);
+                    $('#deleteTurnosModal').modal('hide');
+                    calendar.refetchEvents();
+                    
                 },
                 error: function(xhr, status, error) {
                     console.error('Error al llenar los turnos', error);
