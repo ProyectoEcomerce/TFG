@@ -72,7 +72,16 @@
           initialView: 'timeGridWeek',
           timeZone: 'UTC + 01:00',
           events:'/getAvailability',
+          slotEventOverlap: false,
           editable: true,
+          eventClassNames: function(arg) {
+            // Agrega una clase específica en función del tipo de turno
+            let classNames = [];
+            if (arg.event.extendedProps.typeTurn) {
+                classNames.push('turno-' + arg.event.extendedProps.typeTurn);
+            }
+            return classNames;
+          },
 
           //Eliminar
           eventContent:function(info){
