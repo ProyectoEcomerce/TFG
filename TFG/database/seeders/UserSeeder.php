@@ -33,6 +33,14 @@ class UserSeeder extends Seeder
         ]);
 
         $userRole = Role::where('role', 'user')->first();
+        $user = User::create([
+            'name' => 'Nicolás',
+            'email' => 'nicogomezgarcia1@gmail.com',
+            'password' => bcrypt('11111111'),
+            'area_id' => 1
+        ]);
+
+        $userRole = Role::where('role', 'user')->first();
         if ($userRole) {
             $user->roles()->attach($userRole->id);
         }

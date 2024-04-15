@@ -59,11 +59,18 @@
                         @csrf
                         <div class="form-group">
                             <label for="profile_image">Seleccionar una nueva imagen:</label>
-                                <input type="file" class="form-control" id="profile_image" name="profile_image">
-                            </div>
+                            <input type="file" class="form-control" id="profile_image" name="profile_image">
+                        </div>
                         <button type="submit" class="btn btn-primary">Subir Imagen</button>
                     </form>
 
+                </div>
+                <div class="card-footer">
+                    <!-- Formulario para salir de la sesión -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Salir de la sesión</button>
+                    </form>
                 </div>
             </div>
         </div>
