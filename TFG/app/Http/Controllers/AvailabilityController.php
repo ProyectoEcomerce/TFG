@@ -84,7 +84,8 @@ class AvailabilityController extends Controller
                     'title'=>"Turno de " . $availability->avaibility . " de " . $availability->user->name,
                     'start'=> $availabilityDate->copy()->setTimeFromTimeString($tournStart),
                     'end' => $tournDateEnd ? $tournDateEnd->copy()->setTimeFromTimeString($tournEnd) : $availabilityDate->copy()->setTimeFromTimeString($tournEnd),
-                    'id'=>$availability->id
+                    'id'=>$availability->id,
+                    'typeTurn'=>$availability->avaibility
                 ];
         }
         return response()->json($events);
