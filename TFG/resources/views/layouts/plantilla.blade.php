@@ -27,7 +27,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
                     <img src="/img/logo.png" alt="Logo" width="50" height="50">
-                    Ecotech</a>
+                    TenTwoTurno</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
