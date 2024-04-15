@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="card-body">
-                    <!-- Mostrar errores de validación si los hay -->
+                    <!-- Mostrar errores de validación -->
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>
