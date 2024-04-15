@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->integer('n_day');
-            $table->enum('type_turn', ['mañana', 'tarde','noche']);
+            $table->enum('type_turn', ['manana', 'tarde','noche']);
             $table->integer('hours')->nullable();
             $table->foreignID('user_id')->references('id')->on('users');
             $table->foreignID('week_id')->references('id')->on('weeks');

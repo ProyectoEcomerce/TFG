@@ -4,7 +4,8 @@
 
 @section('content')
 <div class="container mt-5">
-    <button id="fillTurnosButton" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas')">Llenar con disponibilidades</button>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#fillTurnosModal" class="btn btn-success mb-5">Llenar con disponibilidades</a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteTurnosModal" class="btn btn-success mb-5">Eliminar intervalo turnos</a>
     <div class="d-flex justify-content-center">
         <a href="#" data-bs-toggle="modal" data-bs-target="#createTournModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear nuevo turno</a>
     </div>
@@ -40,8 +41,56 @@
                 <option value="tarde">Tarde</option>
                 <option value="noche">Noche</option>
             </select>
-            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres crear esta disponibilidad?')">
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres crear este turno?')">
                 Guarda Turno
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="fillTurnosModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Selecciona el intervalo para llenar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="fillTournForm" method="POST">
+            @csrf
+            <label>Inicio intervalo</label>
+            <input type="date" id="startInterval" name="startInterval" class="form-control mb-2" required>
+            <label>Final intervalo</label>
+            <input type="date" id="endInterval" name="endInterval" class="form-control mb-2" required>
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('Esta acción llenara los turnos con todas las disponibilidades no duplicadas, ¿Quieres continuar?')">
+                Llenar intervalo
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteTurnosModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Selecciona el intervalo para eliminar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="deleteTournForm" method="POST">
+            @csrf
+            <label>Inicio intervalo</label>
+            <input type="date" id="startIntervalDelete" name="startIntervalDelete" class="form-control mb-2" required>
+            <label>Final intervalo</label>
+            <input type="date" id="endIntervalDelete" name="endIntervalDelete" class="form-control mb-2" required>
+            <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('Esta acción eliminara los turnos del intervalo seleccionado, ¿Quieres continuar?')">
+                Eliminar turnos
             </button>
           </form>
         </div>
@@ -108,30 +157,33 @@
             let eventId = info.event.id;
             let newStartDate = info.event.start;
             let newEndDate = info.event.end;
-        
-            // Convertir la fecha de inicio del evento a un objeto Date
+
+            // Convertir la fecha a hora local
             let startDate = new Date(newStartDate);
             let endDate = new Date(newEndDate);
-        
+
+            let startDateLocal = new Date(startDate.getTime() + startDate.getTimezoneOffset() * 60000);
+            let endDateLocal = new Date(endDate.getTime() + endDate.getTimezoneOffset() * 60000);
+
             // Convertir la fecha de inicio del evento a un objeto Carbon
-            let startDateCarbon = moment(startDate);
-            let endDateCarbon = moment(endDate);
+            let startDateCarbon = moment(startDateLocal);
+            let endDateCarbon = moment(endDateLocal);
 
             // Obtener el año y el número de semana
             let year = startDateCarbon.year();
             let weekNumber = startDateCarbon.isoWeek();
         
             // Obtener el número del día de la semana (0 para domingo, 1 para lunes, etc.)
-            let dayOfWeek = startDate.getDay();
+            let dayOfWeek = startDateCarbon.isoWeekday();
 
             //Sacar horas y minutos en el formato correcto
-            let startHoursUTC = newStartDate.getUTCHours();
-            let startMinutesUTC = newStartDate.getUTCMinutes();
-            let startTime = startHoursUTC.toString().padStart(2, '0') + ":" + startMinutesUTC.toString().padStart(2, '0') + ":" + "00";
+            let startHoursLocal = startDateLocal.getHours();
+            let startMinutesLocal = startDateLocal.getMinutes();
+            let startTime = startHoursLocal.toString().padStart(2, '0') + ":" + startMinutesLocal.toString().padStart(2, '0') + ":" + "00";
             
-            let endHoursUTC = newEndDate.getUTCHours();
-            let endMinutesUTC = newEndDate.getUTCMinutes();
-            let endTime = endHoursUTC.toString().padStart(2, '0') + ":" + endMinutesUTC.toString().padStart(2, '0') + ":" + "00";
+            let endHoursLocal = endDateLocal.getHours();
+            let endMinutesLocal = endDateLocal.getMinutes();
+            let endTime = endHoursLocal.toString().padStart(2, '0') + ":" + endMinutesLocal.toString().padStart(2, '0') + ":" + "00";
 
             $.ajax({
                 method:'PUT',
@@ -141,11 +193,14 @@
                     weekNumber: weekNumber,
                     dayOfWeek: dayOfWeek,
                     startHour: startTime,
-                    endHour: endTime
+                    endHour: endTime,
+                    areaId: {{$area->id}}
                 },
                 success:function()
                 {
                     console.log('Se ha movido el evento');
+                    $('#fillTurnosModal').modal('hide');
+                    calendar.refetchEvents();
                 },
                 error:function(error){
                     alert('No hay turnos en este horario');
@@ -154,13 +209,45 @@
           }
         });
         calendar.render();
-        $('#fillTurnosButton').click(function() {
+        $('#fillTournForm').submit(function(e) {
+            e.preventDefault();
+            let startDate = $('#startInterval').val();
+            let endDate = $('#endInterval').val();
+
             $.ajax({
                 method: 'POST',
                 url: '/fill-tourns/{{$area->id}}',
+                data:{
+                    startDate : startDate,
+                    endDate : endDate
+                },
                 success: function(response) {
                     console.log(response.message);
+                    $('#deleteTurnosModal').modal('hide');
                     calendar.refetchEvents();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al llenar los turnos', error);
+                }
+            });
+        });
+        $('#deleteTournForm').submit(function(e) {
+            e.preventDefault();
+            let startDate = $('#startIntervalDelete').val();
+            let endDate = $('#endIntervalDelete').val();
+
+            $.ajax({
+                method: 'POST',
+                url: '/deleteIntervaTourns/{{$area->id}}',
+                data:{
+                    startDate : startDate,
+                    endDate : endDate
+                },
+                success: function(response) {
+                    console.log(response.message);
+                    $('#deleteTurnosModal').modal('hide');
+                    calendar.refetchEvents();
+                    
                 },
                 error: function(xhr, status, error) {
                     console.error('Error al llenar los turnos', error);
