@@ -4,6 +4,41 @@
 
 @section('content')
 
+<div class="container mt-4 mb-4 justify-content-center justify-center">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <form action="{{ route('usersFilter') }}" method="GET">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <input type="text" name="searchText" class="form-control" placeholder="Buscar por nombre de usuario">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form action="{{ route('areaFilter') }}" method="GET">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <select name="areaId" class="form-control">
+                            <option value="">Selecciona un área</option>
+                            @foreach($areas as $area)
+                                <option value="{{ $area->id }}">{{ $area->area_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Filtrar por área</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <div class="container mt-4 mb-4">
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($users as $user)
@@ -42,9 +77,12 @@
                         @method('PUT')
                         @csrf
                         {{-- Cláusula para obtener un token de formulario al enviarlo --}}
-                        <label for="name">Area asignada</label>
-                        <input type="text" name="name" class="form-control mb-2" value="{{ $user->name }}"
-                        placeholder="Nombre" autofocus>
+                        <label for="area">Area asignada</label>
+                        <select name="area" class="form-control mb-2">
+                            @foreach($areas as $area)
+                                <option value="{{ $area->id }}">{{ $area->area_name }}</option>
+                            @endforeach
+                        </select>
                         <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres editar al usuario '+'{{ $user->name}}'+'?')">Guardar cambios</button>
                     </form>
                 </div>

@@ -165,7 +165,8 @@ class TournController extends Controller
                         'title'=> "Turno de " . $tourn->type_turn . " de " . $tourn->user->name,
                         'start'=> $tournDate->copy()->setTimeFromTimeString($tournStart),
                         'end' => $tournDateEnd ? $tournDateEnd->copy()->setTimeFromTimeString($tournEnd) : $tournDate->copy()->setTimeFromTimeString($tournEnd),
-                        'id'=>$tourn->id
+                        'id'=>$tourn->id,
+                        'typeTurn'=>$tourn->type_turn
                     ];
             }
         }

@@ -122,7 +122,16 @@
           initialView: 'dayGridMonth',
           timeZone: 'UTC + 01:00',
           events:'/getTourns/{{$area->id}}',
+          slotEventOverlap: false,
           editable: true,
+          eventClassNames: function(arg) {
+            // Agrega una clase específica en función del tipo de turno
+            let classNames = [];
+            if (arg.event.extendedProps.typeTurn) {
+                classNames.push('turno-' + arg.event.extendedProps.typeTurn);
+            }
+            return classNames;
+          },
 
           //Eliminar
           eventContent:function(info){
@@ -223,7 +232,7 @@
                 },
                 success: function(response) {
                     console.log(response.message);
-                    $('#deleteTurnosModal').modal('hide');
+                    $('#fillTurnosModal').modal('hide');
                     calendar.refetchEvents();
                 },
                 error: function(xhr, status, error) {
