@@ -44,7 +44,7 @@
                         <p><strong>Nombre:</strong> {{ auth()->user()->name }} {{ auth()->user()->surname }}</p>
                         <p><strong>Correo Electrónico:</strong> {{ auth()->user()->email }}</p>
                         <p><strong>Cargo:</strong> {{ auth()->user()->cargo }}</p>
-                        <p><strong>Área:</strong> {{ auth()->user()->area_id }}</p>
+                        <p><strong>Área:</strong> {{ auth()->user()->area->area_name}}</p>
                     </div>
                     <h4>Turnos Asignados</h4>
                     <ul>

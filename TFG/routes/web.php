@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\HomeController;
@@ -63,4 +64,9 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::post('/user/upload-profile-image', [UserController::class, 'uploadProfileImage'])
     ->name('user.uploadProfileImage');
+});
+
+Route::middleware('admin')->group(function () {
+    Route::get('/adminUsers', [AdminController::class, 'getUsers']);
+    Route::put('/updateUser/{id}', [AdminController::class, 'updateUser'])->name('updateUser');
 });
