@@ -42,9 +42,14 @@
 
                     <div class="profile-info">
                         <p><strong>Nombre:</strong> {{ auth()->user()->name }} {{ auth()->user()->surname }}</p>
+                        <p><strong>Nombre usuario:</strong> {{ auth()->user()->username }}</p>
                         <p><strong>Correo Electrónico:</strong> {{ auth()->user()->email }}</p>
                         <p><strong>Cargo:</strong> {{ auth()->user()->cargo }}</p>
-                        <p><strong>Área:</strong> {{ auth()->user()->area->area_name}}</p>
+                        @if (auth()->user()->area)
+                            <p><strong>Área:</strong> {{ auth()->user()->area->area_name }}</p>
+                        @else
+                            <p><strong>Área:</strong> No asignada</p>
+                        @endif
                     </div>
                     <h4>Turnos Asignados</h4>
                     <ul>

@@ -52,6 +52,7 @@
     
                         <div class="profile-info">
                             <p><strong>Nombre:</strong> {{ $user->name }} {{ $user->surname }}</p>
+                            <p><strong>Nombre usuario:</strong> {{ $user->username }}</p>
                             <p><strong>Correo Electrónico:</strong> {{ $user->email }}</p>
                             <p><strong>Cargo:</strong> {{ $user->cargo }}</p>
                             <p><strong>Área:</strong> {{ $user->area->area_name}}</p>

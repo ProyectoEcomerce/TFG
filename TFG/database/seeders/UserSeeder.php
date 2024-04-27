@@ -16,6 +16,8 @@ class UserSeeder extends Seeder
     {
         $user = User::create([
             'name' => 'Admin',
+            'surname' => 'Admin',
+            'username' => 'Admin',
             'email' => 'manuelsr0113@gmail.com',
             'password' => bcrypt('12345678'),
             'area_id' => 2
@@ -27,6 +29,8 @@ class UserSeeder extends Seeder
 
         $user = User::create([
             'name' => 'Luis',
+            'surname' => 'Yerga',
+            'username' => 'LuisYerga',
             'email' => 'lyergamayor1@gmail.com',
             'password' => bcrypt('p12345678'),
             'area_id' => 1
@@ -35,6 +39,8 @@ class UserSeeder extends Seeder
         $userRole = Role::where('role', 'user')->first();
         $user = User::create([
             'name' => 'Nicolás',
+            'surname' => 'Gomez',
+            'username' => 'Nico',
             'email' => 'nicogomezgarcia1@gmail.com',
             'password' => bcrypt('11111111'),
             'area_id' => 1

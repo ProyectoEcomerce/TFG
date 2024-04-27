@@ -37,7 +37,7 @@ class AdminController extends Controller
         $searchText = $request->input('searchText');
         $areas= Area::all();
 
-        $users = User::where('name', 'like', '%' . $searchText . '%')->get();
+        $users = User::where('username', 'like', '%' . $searchText . '%')->get();
 
         return view('admin', compact('users', 'areas'));
     }

@@ -48,6 +48,14 @@
                                         <i class="fas fa-user"></i> {{ __('Cuenta') }}
                                     </a>
                                 </li>
+
+                                @if (auth()->user()->hasRole('admin'))
+                                <li class="nav-item">
+                                    <a href="{{ route('adminUsers') }}" class="nav-link">
+                                        <i class="fa fa-cogs"></i> {{ __('Administración') }}
+                                    </a>
+                                </li>
+                                @endif
                                 
                             @else
                                 <li class="nav-item">
