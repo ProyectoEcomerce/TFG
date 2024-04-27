@@ -51,7 +51,7 @@
 
                                 @if (auth()->user()->hasRole('admin'))
                                 <li class="nav-item">
-                                    <a href="{{ route('adminUsers') }}" class="nav-link">
+                                    <a href="{{ route('viewAdmin') }}" class="nav-link">
                                         <i class="fa fa-cogs"></i> {{ __('Administración') }}
                                     </a>
                                 </li>

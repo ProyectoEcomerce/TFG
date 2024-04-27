@@ -1,6 +1,6 @@
 @extends('layouts.plantilla')
 
-@section('title', "Admin")
+@section('title', "Admin Usuarios")
 
 @section('content')
 
@@ -45,14 +45,12 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        Perfil de Usuario
+                        {{ $user->username }}
                     </div>
     
                     <div class="card-body">
-    
                         <div class="profile-info">
                             <p><strong>Nombre:</strong> {{ $user->name }} {{ $user->surname }}</p>
-                            <p><strong>Nombre usuario:</strong> {{ $user->username }}</p>
                             <p><strong>Correo Electrónico:</strong> {{ $user->email }}</p>
                             <p><strong>Cargo:</strong> {{ $user->cargo }}</p>
                             <p><strong>Área:</strong> {{ $user->area->area_name}}</p>
@@ -78,6 +76,21 @@
                         @method('PUT')
                         @csrf
                         {{-- Cláusula para obtener un token de formulario al enviarlo --}}
+                        <label for="name">Nombre</label>
+                        <input type="text" name="name" class="form-control mb-2" value="{{ $user->name }}" placeholder="{{ $user->name }}" autofocus>
+
+                        <label for="surname">Apellidos</label>
+                        <input type="text" name="surname" class="form-control mb-2" value="{{ $user->surname }}" placeholder="{{ $user->surname }}" autofocus>
+
+                        <label for="username">Nombre de usuario</label>
+                        <input type="text" name="username" class="form-control mb-2" value="{{ $user->username }}" placeholder="{{ $user->username }}" autofocus>
+
+                        <label for="cargo">Cargo</label>
+                        <select name="cargo" class="form-control mb-2">
+                            <option value="agente">Agente</option>
+                            <option value="coordinador">Coordinador</option>
+                        </select>
+                        
                         <label for="area">Area asignada</label>
                         <select name="area" class="form-control mb-2">
                             @foreach($areas as $area)

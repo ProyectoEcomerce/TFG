@@ -67,6 +67,12 @@ Route::middleware('auth', 'verified')->group(function () {
 });
 
 Route::middleware('admin')->group(function () {
+    Route::get('/admin', [AdminController::class, 'getAdmin'])->name('viewAdmin');
+
+    Route::get('/adminAreas', [AdminController::class, 'getAreas'])->name('adminAreas');
+    Route::put('/updateArea/{id}', [AdminController::class, 'updateArea'])->name('updateArea');
+    Route::post('/createArea', [AdminController::class, 'createArea'])->name('createArea');
+
     Route::get('/adminUsers', [AdminController::class, 'getUsers'])->name('adminUsers');
     Route::put('/updateUser/{id}', [AdminController::class, 'updateUser'])->name('updateUser');
     Route::get('/usersFilter', [AdminController::class, 'filterUsers'])->name('usersFilter');
