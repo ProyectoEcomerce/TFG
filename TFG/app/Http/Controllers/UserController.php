@@ -6,23 +6,42 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    public function show($id)
+    public function show()
     {
-        $user = User::findOrFail($id);
-        $turnos = $user->tourns;
+        $user= auth()->user();
 
-        return view('profile', compact('user', 'turnos'));
+        return view('auth.dashboard', compact('user'));
     }
 
-    /**
-     * Actualizar la imagen de perfil del usuario.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function updateUser(Request $request, $id){
+        DB::beginTransaction();
+        try{
+            $request->validate([
+                'name'=>'required|string|max:155',
+                'surname'=>'required|string|max:255',
+                'username' => 'required|string|unique:users,username,'.$id,
+                'email'=>'required|string|unique:users,email,'.$id,
+            ]);
+            $updateUser=User::findOrFail($id);
+            $updateUser->name=$request->name;
+            $updateUser->surname=$request->surname;
+            $updateUser->username=$request->username;
+            $updateUser->email=$request->email;
+            $updateUser->save();
+
+            DB::commit();
+            return back()->with('mensaje', 'Usuario editado exitosamente');
+        }catch(\Exception $e){
+            DB::rollBack();
+            return back()->withErrors('No se pudo editar el usuario. Error: ' . $e->getMessage());
+        }
+    }
+
+
     /**
      * Actualizar la imagen de perfil del usuario.
      *

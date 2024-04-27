@@ -25,7 +25,7 @@ class AdminController extends Controller
             $request->validate([
                 'name'=>'required|string|max:155',
                 'surname'=>'required|string|max:255',
-                'username' => 'required|string|unique:users',
+                'username' => 'required|string|unique:users,username,'.$id,
                 'cargo'=>'required',
                 'area'=>'required'
             ]);

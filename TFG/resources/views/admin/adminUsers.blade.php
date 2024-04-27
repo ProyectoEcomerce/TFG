@@ -72,7 +72,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('updateUser', $user->id) }}" method="POST">
+                    <form action="{{ route('updateUserAdmin', $user->id) }}" method="POST">
                         @method('PUT')
                         @csrf
                         {{-- Cláusula para obtener un token de formulario al enviarlo --}}

@@ -44,7 +44,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="{{ url('/home') }}" class="nav-link">
+                                    <a href="{{ route('home') }}" class="nav-link">
                                         <i class="fas fa-user"></i> {{ __('Cuenta') }}
                                     </a>
                                 </li>

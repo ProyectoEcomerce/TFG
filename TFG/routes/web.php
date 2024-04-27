@@ -25,9 +25,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', function () {
-    return view('auth.dashboard');
-})->middleware(['auth', 'verified']);
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -58,9 +55,9 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get('/', [AreaController::class, 'getAreas']);
 
-    Route::get('/dashboard', function () {
-        return view('auth.dashboard');
-    })->name('dashboard');
+    Route::get('/home', [UserController::class, 'show'])->name('home');
+
+    Route::put('/updateProfile/{id}', [UserController::class, 'updateUser'])->name('updateUser');
 
     Route::post('/user/upload-profile-image', [UserController::class, 'uploadProfileImage'])
     ->name('user.uploadProfileImage');
@@ -74,7 +71,7 @@ Route::middleware('admin')->group(function () {
     Route::post('/createArea', [AdminController::class, 'createArea'])->name('createArea');
 
     Route::get('/adminUsers', [AdminController::class, 'getUsers'])->name('adminUsers');
-    Route::put('/updateUser/{id}', [AdminController::class, 'updateUser'])->name('updateUser');
+    Route::put('/updateUserAdmin/{id}', [AdminController::class, 'updateUser'])->name('updateUserAdmin');
     Route::get('/usersFilter', [AdminController::class, 'filterUsers'])->name('usersFilter');
     Route::get('/areaFilter', [AdminController::class, 'areaFilter'])->name('areaFilter');
 });

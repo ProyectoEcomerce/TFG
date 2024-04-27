@@ -9,6 +9,7 @@
             <div class="card">
                 <div class="card-header">
                     Perfil de Usuario
+                    <a href="#editUserModal" data-bs-toggle="modal" data-bs-target="#editUserModal" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                 </div>
 
                 <div class="card-body">
@@ -41,19 +42,19 @@
                     <hr>
 
                     <div class="profile-info">
-                        <p><strong>Nombre:</strong> {{ auth()->user()->name }} {{ auth()->user()->surname }}</p>
-                        <p><strong>Nombre usuario:</strong> {{ auth()->user()->username }}</p>
-                        <p><strong>Correo Electrónico:</strong> {{ auth()->user()->email }}</p>
-                        <p><strong>Cargo:</strong> {{ auth()->user()->cargo }}</p>
-                        @if (auth()->user()->area)
-                            <p><strong>Área:</strong> {{ auth()->user()->area->area_name }}</p>
+                        <p><strong>Nombre:</strong> {{ $user->name }} {{ $user->surname }}</p>
+                        <p><strong>Nombre usuario:</strong> {{ $user->username }}</p>
+                        <p><strong>Correo Electrónico:</strong> {{ $user->email }}</p>
+                        <p><strong>Cargo:</strong> {{ $user->cargo }}</p>
+                        @if ($user->area)
+                            <p><strong>Área:</strong> {{ $user->area->area_name }}</p>
                         @else
                             <p><strong>Área:</strong> No asignada</p>
                         @endif
                     </div>
                     <h4>Turnos Asignados</h4>
                     <ul>
-                        @foreach(auth()->user()->tourns as $turno)
+                        @foreach($user->tourns as $turno)
                             <li>Día: {{ $turno->n_day }}, Tipo de Turno: {{ $turno->type_turn }}, Horas: {{ $turno->hours }}</li>
                         @endforeach
                     </ul>
@@ -81,4 +82,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editUserModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editando perfil</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('updateUser', $user->id) }}" method="POST">
+                    @method('PUT')
+                    @csrf
+                    {{-- Cláusula para obtener un token de formulario al enviarlo --}}
+                    <label for="name">Nombre</label>
+                    <input type="text" name="name" class="form-control mb-2" value="{{ $user->name }}" placeholder="{{ $user->name }}" autofocus>
+
+                    <label for="surname">Apellidos</label>
+                    <input type="text" name="surname" class="form-control mb-2" value="{{ $user->surname }}" placeholder="{{ $user->surname }}" autofocus>
+
+                    <label for="username">Nombre de usuario</label>
+                    <input type="text" name="username" class="form-control mb-2" value="{{ $user->username }}" placeholder="{{ $user->username }}" autofocus>
+
+                    <label for="email">Email</label>
+                    <input type="text" name="email" class="form-control mb-2" value="{{ $user->email }}" placeholder="{{ $user->email }}" autofocus>
+
+                    <button class="btn btn-secondary btn-block" type="submit" onclick="return confirm('¿Quieres actualizar tu perfil?')">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
