@@ -3,6 +3,14 @@
 @section('title', "Home")
 
 @section('content')
+
+<div class="container mt-5">
+    <div class="d-flex  flex-column align-items-center">
+        <h2>Mis disponibilidades</h2>
+        <h4>Area asignada:{{$area->area_name}}</h4>
+    </div>
+</div>
+
 <div class="container mt-5">
     <div class="d-flex justify-content-center">
         <a href="#" data-bs-toggle="modal" data-bs-target="#createAvailabilityModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear disponibilidad</a>
@@ -69,7 +77,7 @@
                 center:'title',
                 right:'dayGridMonth, timeGridWeek, timeGridDay'
             },
-          initialView: 'timeGridWeek',
+          initialView: 'dayGridMonth',
           timeZone: 'UTC + 01:00',
           events:'/getAvailability',
           slotEventOverlap: false,

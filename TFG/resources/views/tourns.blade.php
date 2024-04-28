@@ -3,17 +3,24 @@
 @section('title', "Turnos")
 
 @section('content')
+
 <div class="container mt-5">
-    <a href="#" data-bs-toggle="modal" data-bs-target="#fillTurnosModal" class="btn btn-success mb-5">Llenar con disponibilidades</a>
-    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteTurnosModal" class="btn btn-success mb-5">Eliminar intervalo turnos</a>
-    <div class="d-flex justify-content-center">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#createTournModal" class="btn btn-success mb-5"><i class="fas fa-plus"></i> Crear nuevo turno</a>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <div id='calendar'></div>
-        </div>
-    </div>
+  <div class="d-flex  flex-column align-items-center">
+      <h2>Turnos del area:{{$area->area_name}}</h2>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-center mb-5">
+      <a href="#" data-bs-toggle="modal" data-bs-target="#fillTurnosModal" class="btn btn-success mx-3">Llenar con disponibilidades</a>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#deleteTurnosModal" class="btn btn-success mx-3">Eliminar intervalo turnos</a>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#createTournModal" class="btn btn-success mx-3"><i class="fas fa-plus"></i> Crear nuevo turno</a>
+  </div>
+  <div class="card">
+      <div class="card-body">
+          <div id='calendar'></div>
+      </div>
+  </div>
 </div>
 
 <div class="modal fade" id="createTournModal">

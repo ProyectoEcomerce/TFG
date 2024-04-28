@@ -19,6 +19,7 @@
                 <div class="card">
                     <div class="card-header">
                         {{$area->area_name}}
+                        <a href="#editAreaModal{{$area->id}}" data-bs-toggle="modal" data-bs-target="#editAreaModal{{$area->id}}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                     </div>
     
                     <div class="card-body">
@@ -27,7 +28,7 @@
                             <p><strong>Turno de mañana:</strong> {{ substr($area->mañana_start_time,0,-3) }}-{{ substr($area->mañana_end_time,0,-3) }}</p>
                             <p><strong>Turno de tarde:</strong> {{ substr($area->tarde_start_time,0,-3) }}-{{ substr($area->tarde_end_time,0,-3) }}</p>
                             <p><strong>Turno de noche:</strong> {{ substr($area->noche_start_time,0,-3) }}-{{ substr($area->noche_end_time,0,-3) }}</p>
-                            <a href="#editAreaModal{{$area->id}}" data-bs-toggle="modal" data-bs-target="#editAreaModal{{$area->id}}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                            <a href="{{ route('show.area', $area->id) }}" class="btn btn-primary" role="button">Acceder a área {{ $area->area_name }}</a>
                         </div>
                     </div>
                 </div>

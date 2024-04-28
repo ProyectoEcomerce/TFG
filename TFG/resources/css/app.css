@@ -1,14 +1,17 @@
 
 .turno-manana {
     background-color: #ffcc00; 
+    overflow: hidden; /* Oculta el texto que se sale del contenedor */
 }
 
 .turno-tarde {
     background-color: #ff9900; 
+    overflow: hidden; /* Oculta el texto que se sale del contenedor */
 }
 
 .turno-noche {
     background-color: #3366ff; 
+    overflow: hidden; /* Oculta el texto que se sale del contenedor */
 }
 
 .footer {

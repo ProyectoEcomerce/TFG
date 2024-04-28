@@ -44,6 +44,12 @@
                                 </li>
 
                                 <li class="nav-item">
+                                    <a href="{{ route('availability') }}" class="nav-link">
+                                        <i class="fas fa-calendar-alt"></i> {{ __('Mis disponibilidades') }}
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
                                     <a href="{{ route('home') }}" class="nav-link">
                                         <i class="fas fa-user"></i> {{ __('Cuenta') }}
                                     </a>
