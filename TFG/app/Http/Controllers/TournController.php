@@ -22,6 +22,14 @@ class TournController extends Controller
         return view('tourns', compact('area', 'users'));
     }
 
+    public function mytourns()
+    {
+        $area_user=auth()->user()->area->id;
+        $area = Area::findOrFail($area_user);
+        $users= User::where('area_id', $area_user)->get();
+        return view('tournsUser', compact('area', 'users'));
+    }
+
     public function fillTourns(Request $request, $id){
         DB::beginTransaction();
         try{

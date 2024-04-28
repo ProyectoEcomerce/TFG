@@ -50,6 +50,12 @@
                                 </li>
 
                                 <li class="nav-item">
+                                    <a href="{{ route('tourn') }}" class="nav-link">
+                                        <i class="fas fa-calendar-alt"></i> {{ __('Mis turnos') }}
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
                                     <a href="{{ route('home') }}" class="nav-link">
                                         <i class="fas fa-user"></i> {{ __('Cuenta') }}
                                     </a>

@@ -59,6 +59,8 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::put('/updateProfile/{id}', [UserController::class, 'updateUser'])->name('updateUser');
 
+    Route::get('/getMyTourns', [TournController::class, 'mytourns'])->name('tourn');
+
     Route::post('/user/upload-profile-image', [UserController::class, 'uploadProfileImage'])
     ->name('user.uploadProfileImage');
 });
