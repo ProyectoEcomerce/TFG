@@ -24,10 +24,17 @@ class TournController extends Controller
 
     public function mytourns()
     {
-        $area_user=auth()->user()->area->id;
-        $area = Area::findOrFail($area_user);
-        $users= User::where('area_id', $area_user)->get();
-        return view('tournsUser', compact('area', 'users'));
+        $area = auth()->user()->area;
+    
+        if ($area) {
+            $area_user = $area->id;
+            $users = User::where('area_id', $area_user)->get();
+            return view('tournsUser', compact('area', 'users'));
+        } else {
+            $area=null;
+            return view('tournsUser', compact('area'));
+        }
+
     }
 
     public function fillTourns(Request $request, $id){

@@ -53,7 +53,11 @@
                             <p><strong>Nombre:</strong> {{ $user->name }} {{ $user->surname }}</p>
                             <p><strong>Correo Electrónico:</strong> {{ $user->email }}</p>
                             <p><strong>Cargo:</strong> {{ $user->cargo }}</p>
-                            <p><strong>Área:</strong> {{ $user->area->area_name}}</p>
+                            @if ($user->area)
+                                <p><strong>Área:</strong> {{ $user->area->area_name }}</p>
+                            @else
+                                <p><strong>Área:</strong> No asignada</p>
+                            @endif
                             <a href="#editUserModal{{$user->id}}" data-bs-toggle="modal" data-bs-target="#editUserModal{{$user->id}}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                         </div>
                     </div>

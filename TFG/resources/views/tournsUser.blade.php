@@ -4,6 +4,7 @@
 
 @section('content')
 
+@if ($area)
 <div class="container mt-5">
   <div class="d-flex  flex-column align-items-center">
       <h2>Turnos del area:{{$area->area_name}}</h2>
@@ -17,6 +18,21 @@
       </div>
   </div>
 </div>
+
+@else
+<div class="container mt-5">
+  <div class="container mt-5">
+      <div class="d-flex  flex-column align-items-center">
+          <h2>No tienes ningun area asignada</h2>
+      </div>
+  </div>
+  <div class="card">
+      <div class="card-body">
+          <div id='calendar'></div>
+      </div>
+  </div>
+</div>
+@endif
 
 @endsection
 
@@ -33,6 +49,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
+        @if ($area)
         const calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar:{
                 left:'prev,next today', 
@@ -62,6 +79,7 @@
           }
         });
         calendar.render();
+        @endif
       });
     </script>
 @endsection

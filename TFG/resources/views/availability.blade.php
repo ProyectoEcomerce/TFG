@@ -4,6 +4,8 @@
 
 @section('content')
 
+@if ($user->area)
+
 <div class="container mt-5">
     <div class="d-flex  flex-column align-items-center">
         <h2>Mis disponibilidades</h2>
@@ -56,6 +58,21 @@
       </div>
     </div>
   </div>
+  @else
+  <div class="container mt-5">
+    <div class="container mt-5">
+        <div class="d-flex  flex-column align-items-center">
+            <h2>Mis disponibilidades</h2>
+            <h4>No tienes ningun area asignada</h4>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div id='calendar'></div>
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection
 

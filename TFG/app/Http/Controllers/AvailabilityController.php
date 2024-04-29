@@ -17,7 +17,7 @@ class AvailabilityController extends Controller
     {
         $user= Auth::user();
         $area = $user->area;
-        return view('availability', compact('area'));
+        return view('availability', compact( 'user','area'));
     }
 
     public function createAvailability(Request $request){
