@@ -1,4 +1,14 @@
 @extends('auth.template')
+@section('title', "login")
+@section('links')
+    <!-- Replace the Bootstrap 4 link with Bootstrap 5 links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/css/bootstrap.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="{{ asset('styles/forms.css') }}">
+    <!-- Include Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+@endsection
 
 @section('content')
 <div class="container">

@@ -1,3 +1,8 @@
+body {
+    background-image: url(../../public/images/forms.jpg); 
+    background-size: cover;
+    background-position: center; 
+}
 
 .turno-manana {
     background-color: #ffcc00; 
@@ -14,11 +19,15 @@
     overflow: hidden; /* Oculta el texto que se sale del contenedor */
 }
 
+.header{
+    background-color: #FEFEFE; 
+}
+
 .footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #f8f9fa; 
+    background-color: #FEFEFE; 
     padding: 20px 0;
     text-align: center; 
 }
