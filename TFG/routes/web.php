@@ -29,6 +29,8 @@ Route::get('/', function () {
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
+    Route::get('/dashboard', [UserController::class])->name('dashboard');
+
     Route::get('/tourns/{id}', [TournController::class, 'index'])->name('show.area');
 
     Route::get('/avai', [AvailabilityController::class, 'index'])->name('availability');
