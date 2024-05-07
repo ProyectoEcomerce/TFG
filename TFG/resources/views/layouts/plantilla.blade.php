@@ -10,6 +10,7 @@
     <title>@yield('title')</title>
 
     @vite('resources/css/app.css', 'resources/js/app.js', 'resources/js/confirmAction.js')
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -23,7 +24,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #83B271;">
+        <nav class="navbar navbar-expand-lg sticky-top header" >
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
                     <img src="/img/logo.png" alt="Logo" width="50" height="50">
@@ -83,15 +84,23 @@
             </div>
         </nav>
     </header>
+     <div class="container">
     <main>
-        @yield('content')
+       
+            @yield('content')
+      
     </main>
-    <footer class="footer mt-auto py-3 bg-light">
+  </div>
+    <footer class="footer mt-auto py-3">
         <div class="container">
-            <span class="text-muted">© 2024 102turno</span>
+            <div class="row">
+                <div class="col-md-4 d-flex align-items-center">
+                    <span class="text-muted">© 2024 102turno</span>
+                </div>
+            </div>
         </div>
     </footer>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>

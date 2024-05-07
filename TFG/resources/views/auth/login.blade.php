@@ -1,5 +1,5 @@
-@extends('auth.template')
-
+@extends('layouts.plantilla')
+@section('title', "login")
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
