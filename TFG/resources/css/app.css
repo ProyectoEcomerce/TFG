@@ -1,33 +1,36 @@
 body {
-    background-image: url(../../public/images/lightback.jpg); 
+    background-image: url(../../public/images/lightback.jpg);
     background-size: cover;
-    background-position: center; 
+    background-repeat:no-repeat ;
 }
 
 .turno-manana {
-    background-color: #ffcc00; 
-    overflow: hidden; /* Oculta el texto que se sale del contenedor */
+    background-color: #ffcc00;
+    overflow: hidden;
+    /* Oculta el texto que se sale del contenedor */
 }
 
 .turno-tarde {
-    background-color: #ff9900; 
-    overflow: hidden; /* Oculta el texto que se sale del contenedor */
+    background-color: #ff9900;
+    overflow: hidden;
+    /* Oculta el texto que se sale del contenedor */
 }
 
 .turno-noche {
-    background-color: #3366ff; 
-    overflow: hidden; /* Oculta el texto que se sale del contenedor */
+    background-color: #3366ff;
+    overflow: hidden;
+    /* Oculta el texto que se sale del contenedor */
 }
 
-.header{
-    background-color: #FEFEFE; 
+.header {
+    background-color: #FEFEFE;
 }
 
 .footer {
-    position: fixed;
+    position: flex;
     bottom: 0;
     width: 100%;
-    background-color: #FEFEFE; 
+    background-color: #FEFEFE;
     padding: 20px 0;
-    text-align: center; 
+    text-align: center;
 }
