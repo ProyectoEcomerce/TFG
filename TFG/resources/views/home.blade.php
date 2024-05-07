@@ -28,19 +28,6 @@
                         <p class="text-center">
                             Bienvenido a nuestra aplicación, aqui podra seleccionar en la cabecera de nuestra web las acciones que desee tomar.
                         </p>
-
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tr>
-                                    <td class="text-center">
-                                        <img src="{{ asset('images/pc1.webp') }}" class="img-fluid" alt="PC Image 1">
-                                    </td>
-                                    <td class="text-center">
-                                        <img src="{{ asset('images/pc2.webp') }}" class="img-fluid" alt="PC Image 2">
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>

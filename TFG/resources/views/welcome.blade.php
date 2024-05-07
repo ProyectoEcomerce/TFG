@@ -36,23 +36,6 @@
                         <p class="text-center">
                             Ofrecemos una plataforma en la que los usuarios pueden marcar las preferencias de sus turnos y los administradores pueden rellenar los turnos en base de las preferecias de los usuarios y dirigirt la aplicación.
                         </p>
-
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tr>
-                                    <td class="text-center">
-                                        <img src="{{ asset('images/pc1.webp') }}" class="img-fluid" alt="PC Image 1">
-                                    </td>
-                                    <td class="text-center">
-                                        <img src="{{ asset('images/pc2.webp') }}" class="img-fluid" alt="PC Image 2">
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <p class="text-center">
-                            @lang('messages.promise')
-                        </p>
                     </div>
                 </div>
             </div>

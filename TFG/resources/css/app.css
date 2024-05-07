@@ -27,7 +27,7 @@ body {
 }
 
 .footer {
-    position: flex;
+    position: fixed;
     bottom: 0;
     width: 100%;
     background-color: #FEFEFE;
