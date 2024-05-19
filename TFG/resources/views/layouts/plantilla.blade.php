@@ -27,7 +27,7 @@
         <nav class="navbar navbar-expand-lg sticky-top header" >
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
-                    <img src="/img/logo.png" alt="Logo" width="50" height="50">
+                    <img src="/images/logo.png" alt="Logo" width="100" height="50">
                     TenTwoTurno</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
